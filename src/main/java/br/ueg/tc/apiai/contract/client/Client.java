@@ -1,4 +1,4 @@
-package br.ueg.tc.aiapi.contract.client;
+package br.ueg.tc.apiai.contract.client;
 
 public interface Client {
     String getApiKey();

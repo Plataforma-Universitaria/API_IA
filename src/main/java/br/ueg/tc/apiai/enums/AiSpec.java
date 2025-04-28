@@ -1,4 +1,4 @@
-package br.ueg.tc.aiapi.enums;
+package br.ueg.tc.apiai.enums;
 
 public enum AiSpec {
     OPENAI_OMINI_4("gpt-4");

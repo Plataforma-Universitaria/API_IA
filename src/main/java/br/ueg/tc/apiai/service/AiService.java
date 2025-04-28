@@ -1,7 +1,7 @@
-package br.ueg.tc.aiapi.service;
+package br.ueg.tc.apiai.service;
 
-import br.ueg.tc.aiapi.contract.client.AbstractClient;
-import br.ueg.tc.aiapi.contract.client.ChatClientFactory;
+import br.ueg.tc.apiai.contract.client.AbstractClient;
+import br.ueg.tc.apiai.contract.client.ChatClientFactory;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.openai.OpenAiChatModel;
 import org.springframework.stereotype.Service;

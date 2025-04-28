@@ -1,4 +1,4 @@
-package br.ueg.tc.aiapi.controllers;
+package br.ueg.tc.apiai.controllers;
 
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.web.bind.annotation.*;

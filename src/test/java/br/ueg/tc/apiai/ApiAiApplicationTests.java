@@ -1,4 +1,4 @@
-package br.ueg.tc.aiapi;
+package br.ueg.tc.apiai;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

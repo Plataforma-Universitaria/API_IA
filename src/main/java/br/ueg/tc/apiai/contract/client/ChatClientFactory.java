@@ -1,4 +1,4 @@
-package br.ueg.tc.aiapi.contract.client;
+package br.ueg.tc.apiai.contract.client;
 
 import io.micrometer.observation.ObservationRegistry;
 import org.springframework.ai.model.ApiKey;
