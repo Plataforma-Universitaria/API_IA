@@ -15,6 +15,7 @@ import java.util.List;
 
 @Service
 public class AiService<C extends AbstractClient> {
+
     private final ChatClient chatClient;
 
     public AiService(ChatClientFactory<C> chatClientFactory) {
@@ -22,6 +23,9 @@ public class AiService<C extends AbstractClient> {
         this.chatClient = ChatClient.create(openAiChatModel);
     }
 
+    /**
+     * Envia um prompt com configurações avançadas.
+     */
     public ChatResponse sendPrompt(String promptText, double temperature, Integer maxTokens, ResponseFormat responseFormat) {
         Prompt prompt = new Prompt(List.of(new UserMessage(promptText)));
 
@@ -37,10 +41,44 @@ public class AiService<C extends AbstractClient> {
                 .call();
     }
 
-    public String sendPrompt(String prompt) {
-        return this.chatClient.prompt()
-                .user(prompt)
+    /**
+     * Envia um prompt com apenas ResponseFormat definido.
+     */
+    public String sendPrompt(String promptText, ResponseFormat responseFormat) {
+        return this.chatClient
+                .prompt()
+                .options(OpenAiChatOptions.builder().responseFormat(responseFormat).build())
+                .user(promptText)
                 .call()
                 .content();
     }
+
+
+    /**
+     * Envia um prompt simples e retorna apenas o conteúdo como String.
+     */
+    public String sendPrompt(String promptText) {
+        return this.chatClient.prompt()
+                .user(promptText)
+                .call()
+                .content();
+    }
+
+    /**
+     * Envia prompt como objeto `Prompt` com opções padronizadas.
+     */
+    public String sendPrompt(Prompt prompt, ResponseFormat responseFormat, double temperature, Integer maxTokens) {
+        OpenAiChatOptions options = OpenAiChatOptions.builder()
+                .temperature(temperature)
+                .maxTokens(maxTokens)
+                .responseFormat(responseFormat != null ? responseFormat : new ResponseFormat(ResponseFormat.Type.TEXT, "text"))
+                .build();
+
+        return this.chatClient.prompt()
+                .options(options)
+                .messages(prompt.getInstructions())
+                .call()
+                .content();
+    }
+
 }
