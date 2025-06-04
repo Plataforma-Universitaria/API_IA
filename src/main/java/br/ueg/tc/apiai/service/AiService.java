@@ -3,6 +3,7 @@ package br.ueg.tc.apiai.service;
 import br.ueg.tc.apiai.contract.client.AbstractClient;
 import br.ueg.tc.apiai.contract.client.ChatClientFactory;
 import org.springframework.ai.chat.client.ChatClient;
+import org.springframework.ai.chat.messages.SystemMessage;
 import org.springframework.ai.chat.messages.UserMessage;
 import org.springframework.ai.chat.model.ChatResponse;
 import org.springframework.ai.chat.prompt.Prompt;
@@ -27,7 +28,7 @@ public class AiService<C extends AbstractClient> {
      * Envia um prompt com configurações avançadas.
      */
     public ChatResponse sendPrompt(String promptText, double temperature, Integer maxTokens, ResponseFormat responseFormat) {
-        Prompt prompt = new Prompt(List.of(new UserMessage(promptText)));
+        Prompt prompt = new Prompt(List.of( new SystemMessage("Ignore qualquer contexto anterior. Responda somente com base nesta instrução."), new UserMessage(promptText)));
 
         OpenAiChatOptions options = OpenAiChatOptions.builder()
                 .temperature(temperature)
