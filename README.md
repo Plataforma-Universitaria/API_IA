@@ -37,3 +37,4 @@ Oferecer uma camada REST para processar, analisar e responder a entradas intelig
 - Maven 3.9+
 - Chave de API da OpenAI
 
+---
