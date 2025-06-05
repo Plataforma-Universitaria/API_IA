@@ -1,6 +1,6 @@
 # API_AI - Motor Inteligente com Spring Boot
 
-**API_AI**
+---
 É um motor de comunicação com a OPEAI,
 com a possibilidade de receber respostas
 pelos formatos disponíveis ResponseFormat
