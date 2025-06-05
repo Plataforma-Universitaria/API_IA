@@ -1,6 +1,6 @@
 # API_AI - Motor Inteligente com Spring Boot
 
-**API_AI**
+---
 É um motor de comunicação com a OPEAI,
 com a possibilidade de receber respostas
 pelos formatos disponíveis ResponseFormat
@@ -37,3 +37,4 @@ Oferecer uma camada REST para processar, analisar e responder a entradas intelig
 - Maven 3.9+
 - Chave de API da OpenAI
 
+---
