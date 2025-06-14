@@ -12,6 +12,7 @@ import org.springframework.ai.openai.OpenAiChatOptions;
 import org.springframework.ai.openai.api.ResponseFormat;
 import org.springframework.stereotype.Service;
 
+import java.lang.reflect.Type;
 import java.util.List;
 
 @Service
@@ -58,12 +59,12 @@ public class AiService<C extends AbstractClient> {
     /**
      * Envia um prompt simples e retorna apenas o conteúdo como String.
      */
-    public String sendPrompt(String promptText) {
-        return this.chatClient.prompt()
-                .user(promptText)
-                .call()
-                .content();
-    }
+//    public String sendPrompt(String promptText) {
+//        return this.chatClient.prompt()
+//                .user(promptText)
+//                .call()
+//                .content();
+//    }
 
     /**
      * Envia prompt como objeto `Prompt` com opções padronizadas.
@@ -73,6 +74,29 @@ public class AiService<C extends AbstractClient> {
                 .temperature(temperature)
                 .maxTokens(maxTokens)
                 .responseFormat(responseFormat != null ? responseFormat : new ResponseFormat(ResponseFormat.Type.TEXT, "text"))
+                .build();
+
+        return this.chatClient.prompt()
+                .options(options)
+                .messages(prompt.getInstructions())
+                .call()
+                .content();
+    }
+
+    public String sendPrompt(String promptText) {
+        return sendPrompt(promptText, 0.2, 100, ResponseFormat.Type.TEXT);
+    }
+
+    public String sendPrompt(String promptText, double temperature, int maxTokens, ResponseFormat.Type type) {
+        Prompt prompt = new Prompt(List.of(
+                new SystemMessage("Ignore qualquer contexto anterior. Responda somente com base nesta instrução."),
+                new UserMessage(promptText)
+        ));
+
+        OpenAiChatOptions options = OpenAiChatOptions.builder()
+                .temperature(temperature)
+                .maxTokens(maxTokens)
+                .responseFormat(new ResponseFormat(type, null)) // <- CORREÇÃO AQUI
                 .build();
 
         return this.chatClient.prompt()
