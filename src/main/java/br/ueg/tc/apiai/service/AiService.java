@@ -55,17 +55,6 @@ public class AiService<C extends AbstractClient> {
                 .content();
     }
 
-
-    /**
-     * Envia um prompt simples e retorna apenas o conteúdo como String.
-     */
-//    public String sendPrompt(String promptText) {
-//        return this.chatClient.prompt()
-//                .user(promptText)
-//                .call()
-//                .content();
-//    }
-
     /**
      * Envia prompt como objeto `Prompt` com opções padronizadas.
      */
@@ -84,19 +73,16 @@ public class AiService<C extends AbstractClient> {
     }
 
     public String sendPrompt(String promptText) {
-        return sendPrompt(promptText, 0.2, 100, ResponseFormat.Type.TEXT);
+        return sendPrompt(promptText, 0.2, 350, ResponseFormat.Type.TEXT);
     }
 
     public String sendPrompt(String promptText, double temperature, int maxTokens, ResponseFormat.Type type) {
-        Prompt prompt = new Prompt(List.of(
-                new SystemMessage("Ignore qualquer contexto anterior. Responda somente com base nesta instrução."),
-                new UserMessage(promptText)
-        ));
+        Prompt prompt = createCleanPrompt(promptText);
 
         OpenAiChatOptions options = OpenAiChatOptions.builder()
                 .temperature(temperature)
                 .maxTokens(maxTokens)
-                .responseFormat(new ResponseFormat(type, null)) // <- CORREÇÃO AQUI
+                .responseFormat(new ResponseFormat(type, null))
                 .build();
 
         return this.chatClient.prompt()
@@ -105,5 +91,13 @@ public class AiService<C extends AbstractClient> {
                 .call()
                 .content();
     }
+
+    private Prompt createCleanPrompt(String userText) {
+        return new Prompt(List.of(
+                new SystemMessage("Ignore qualquer contexto anterior. Responda somente com base nesta instrução."),
+                new UserMessage(userText)
+        ));
+    }
+
 
 }
