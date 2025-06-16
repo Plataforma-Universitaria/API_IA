@@ -73,7 +73,7 @@ public class AiService<C extends AbstractClient> {
     }
 
     public String sendPrompt(String promptText) {
-        return sendPrompt(promptText, 0.2, 350, ResponseFormat.Type.TEXT);
+        return sendPrompt(promptText, 0.2, 100, ResponseFormat.Type.TEXT);
     }
 
     public String sendPrompt(String promptText, double temperature, int maxTokens, ResponseFormat.Type type) {
