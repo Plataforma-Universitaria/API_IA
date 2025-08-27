@@ -12,7 +12,6 @@ import org.springframework.ai.openai.OpenAiChatOptions;
 import org.springframework.ai.openai.api.ResponseFormat;
 import org.springframework.stereotype.Service;
 
-import java.lang.reflect.Type;
 import java.util.List;
 
 @Service
@@ -29,12 +28,14 @@ public class AiService<C extends AbstractClient> {
      * Envia um prompt com configurações avançadas.
      */
     public ChatResponse sendPrompt(String promptText, double temperature, Integer maxTokens, ResponseFormat responseFormat) {
-        Prompt prompt = new Prompt(List.of( new SystemMessage("Ignore qualquer contexto anterior. Responda somente com base nesta instrução."), new UserMessage(promptText)));
+        Prompt prompt = createCleanPrompt(promptText, "Você é uma IA útil, responda de forma clara e objetiva.");
 
         OpenAiChatOptions options = OpenAiChatOptions.builder()
                 .temperature(temperature)
                 .maxTokens(maxTokens)
-                .responseFormat(responseFormat != null ? responseFormat : new ResponseFormat(ResponseFormat.Type.TEXT, "text"))
+                .responseFormat(responseFormat != null
+                        ? responseFormat
+                        : new ResponseFormat(ResponseFormat.Type.TEXT, "text"))
                 .build();
 
         return (ChatResponse) this.chatClient.prompt()
@@ -44,13 +45,20 @@ public class AiService<C extends AbstractClient> {
     }
 
     /**
-     * Envia um prompt com apenas ResponseFormat definido.
+     * Método simples com ResponseFormat e SystemMessage.
      */
-    public String sendPrompt(String promptText, ResponseFormat responseFormat) {
-        return this.chatClient
-                .prompt()
-                .options(OpenAiChatOptions.builder().responseFormat(responseFormat).build())
-                .user(promptText)
+    public String sendPromptWithSystemMessage(String promptText, String systemText, ResponseFormat format) {
+        Prompt prompt = createCleanPrompt(promptText, systemText);
+
+        OpenAiChatOptions options = OpenAiChatOptions.builder()
+                .temperature(0.05)
+                .maxTokens(500)
+                .responseFormat(format != null ? format : new ResponseFormat(ResponseFormat.Type.TEXT, "text"))
+                .build();
+
+        return this.chatClient.prompt()
+                .options(options)
+                .messages(prompt.getInstructions())
                 .call()
                 .content();
     }
@@ -62,7 +70,9 @@ public class AiService<C extends AbstractClient> {
         OpenAiChatOptions options = OpenAiChatOptions.builder()
                 .temperature(temperature)
                 .maxTokens(maxTokens)
-                .responseFormat(responseFormat != null ? responseFormat : new ResponseFormat(ResponseFormat.Type.TEXT, "text"))
+                .responseFormat(responseFormat != null
+                        ? responseFormat
+                        : new ResponseFormat(ResponseFormat.Type.TEXT, "text"))
                 .build();
 
         return this.chatClient.prompt()
@@ -72,12 +82,18 @@ public class AiService<C extends AbstractClient> {
                 .content();
     }
 
+    /**
+     * Versão simplificada: apenas texto, defaults fixos.
+     */
     public String sendPrompt(String promptText) {
-        return sendPrompt(promptText, 0.2, 100, ResponseFormat.Type.TEXT);
+        return sendPrompt(promptText, 0.5, 200, ResponseFormat.Type.TEXT, "Você é uma IA útil.");
     }
 
-    public String sendPrompt(String promptText, double temperature, int maxTokens, ResponseFormat.Type type) {
-        Prompt prompt = createCleanPrompt(promptText);
+    /**
+     * Com systemMessage customizado e opções avançadas.
+     */
+    public String sendPrompt(String promptText, double temperature, int maxTokens, ResponseFormat.Type type, String systemText) {
+        Prompt prompt = createCleanPrompt(promptText, systemText);
 
         OpenAiChatOptions options = OpenAiChatOptions.builder()
                 .temperature(temperature)
@@ -92,12 +108,13 @@ public class AiService<C extends AbstractClient> {
                 .content();
     }
 
-    private Prompt createCleanPrompt(String userText) {
+    /**
+     * Cria prompt unindo systemMessage e userMessage.
+     */
+    private Prompt createCleanPrompt(String userText, String systemText) {
         return new Prompt(List.of(
-                new SystemMessage("Ignore qualquer contexto anterior. Responda somente com base nesta instrução."),
+                new SystemMessage(systemText),
                 new UserMessage(userText)
         ));
     }
-
-
 }
