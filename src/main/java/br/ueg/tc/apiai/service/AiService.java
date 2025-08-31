@@ -86,7 +86,7 @@ public class AiService<C extends AbstractClient> {
      * Versão simplificada: apenas texto, defaults fixos.
      */
     public String sendPrompt(String promptText) {
-        return sendPrompt(promptText, 0.6, 200, ResponseFormat.Type.TEXT, "Você é uma IA útil.");
+        return sendPrompt(promptText, 0.4, 300, ResponseFormat.Type.TEXT, "Você é uma IA útil.");
     }
 
     /**
