@@ -51,7 +51,7 @@ public class AiService<C extends AbstractClient> {
         Prompt prompt = createCleanPrompt(promptText, systemText);
 
         OpenAiChatOptions options = OpenAiChatOptions.builder()
-                .temperature(0.04)
+                .temperature(0.05)
                 .maxTokens(500)
                 .responseFormat(format != null ? format : new ResponseFormat(ResponseFormat.Type.TEXT, "text"))
                 .build();
@@ -86,7 +86,7 @@ public class AiService<C extends AbstractClient> {
      * Versão simplificada: apenas texto, defaults fixos.
      */
     public String sendPrompt(String promptText) {
-        return sendPrompt(promptText, 0.3, 200, ResponseFormat.Type.TEXT, "Você é uma IA útil.");
+        return sendPrompt(promptText, 0.4, 300, ResponseFormat.Type.TEXT, "Você é uma IA útil.");
     }
 
     /**
