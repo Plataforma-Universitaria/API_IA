@@ -19,6 +19,16 @@ public class AiService<C extends AbstractClient> {
 
     private final ChatClient chatClient;
 
+    private static final String SYSTEM_PROMPT = """
+            Você é um assistente de IA especialista e pragmático.
+            Sua função é fornecer respostas diretas, factuais e concisas.
+            - NÃO use saudações, despedidas ou frases de preenchimento.
+            - NÃO dê opiniões, especulações ou conselhos.
+            - NÃO explique o que você faz.
+            - Foque exclusivamente nos dados e na tarefa solicitada.
+            - Responda de forma objetiva e sem rodeios.
+            """;
+
     public AiService(ChatClientFactory<C> chatClientFactory) {
         OpenAiChatModel openAiChatModel = chatClientFactory.createChatModel();
         this.chatClient = ChatClient.create(openAiChatModel);
@@ -28,10 +38,11 @@ public class AiService<C extends AbstractClient> {
      * Envia um prompt com configurações avançadas.
      */
     public ChatResponse sendPrompt(String promptText, double temperature, Integer maxTokens, ResponseFormat responseFormat) {
-        Prompt prompt = createCleanPrompt(promptText, "Você é uma IA útil, responda de forma clara e objetiva.");
+        Prompt prompt = createCleanPrompt(promptText, SYSTEM_PROMPT);
 
         OpenAiChatOptions options = OpenAiChatOptions.builder()
                 .temperature(temperature)
+                .topP(0.2)
                 .maxTokens(maxTokens)
                 .responseFormat(responseFormat != null
                         ? responseFormat
@@ -52,6 +63,7 @@ public class AiService<C extends AbstractClient> {
 
         OpenAiChatOptions options = OpenAiChatOptions.builder()
                 .temperature(0.05)
+                .topP(0.2)
                 .maxTokens(500)
                 .responseFormat(format != null ? format : new ResponseFormat(ResponseFormat.Type.TEXT, "text"))
                 .build();
@@ -86,7 +98,7 @@ public class AiService<C extends AbstractClient> {
      * Versão simplificada: apenas texto, defaults fixos.
      */
     public String sendPrompt(String promptText) {
-        return sendPrompt(promptText, 0.2, 300, ResponseFormat.Type.TEXT, "Você é uma IA útil.");
+        return sendPrompt(promptText, 0.07, 300, ResponseFormat.Type.TEXT, SYSTEM_PROMPT);
     }
 
     /**
@@ -98,6 +110,7 @@ public class AiService<C extends AbstractClient> {
         OpenAiChatOptions options = OpenAiChatOptions.builder()
                 .temperature(temperature)
                 .maxTokens(maxTokens)
+                .topP(0.2)
                 .responseFormat(new ResponseFormat(type, null))
                 .build();
 
