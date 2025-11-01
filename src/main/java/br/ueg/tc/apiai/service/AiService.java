@@ -42,7 +42,7 @@ public class AiService<C extends AbstractClient> {
 
         OpenAiChatOptions options = OpenAiChatOptions.builder()
                 .temperature(temperature)
-                .topP(1.0)
+                .topP(5.0)
                 .maxTokens(maxTokens)
                 .responseFormat(responseFormat != null
                         ? responseFormat
@@ -62,8 +62,8 @@ public class AiService<C extends AbstractClient> {
         Prompt prompt = createCleanPrompt(promptText, systemText);
 
         OpenAiChatOptions options = OpenAiChatOptions.builder()
-                .temperature(0.0)
-                .topP(1.0)
+                .temperature(0.1)
+                .topP(5.0)
                 .maxTokens(500)
                 .responseFormat(format != null ? format : new ResponseFormat(ResponseFormat.Type.TEXT, "text"))
                 .build();
