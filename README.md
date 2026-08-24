@@ -1,21 +1,21 @@
-# API_AI - Motor Inteligente com Spring Boot
+# API_AI — Módulo de acesso à OpenAI com Spring AI
 
 ---
-É um motor de comunicação com a OPENAI,
-com a possibilidade de receber respostas
-pelos formatos disponíveis ResponseFormat
-Na versão atual 0.0.1-SNAPSHOT.
+É um módulo JAR de comunicação com a OpenAI, com suporte aos formatos de resposta disponibilizados pelo Spring AI, na versão atual `0.0.1-SNAPSHOT`.
 ---
 
 ## Objetivo
 
-Oferecer uma camada REST para processar, analisar e responder a entradas inteligentes como:
+Oferecer classes reutilizáveis para processar prompts com a OpenAI:
 
 - Conexão direta com OpenAI (ChatGPT)
-- Interface REST para envio de prompts e recebimento de respostas
-- Suporte reativo com Spring WebFlux
+- `ChatClientFactory` para construir `OpenAiChatModel`
+- `AiService` para envio de prompts e obtenção de `ChatResponse`
+- Suporte a `ResponseFormat` nas sobrecargas do serviço
 - Estrutura modular e moderna com Java 21
 - Serialização eficiente com Jackson
+
+O código atual não possui `@RestController` nem expõe endpoint HTTP. Apesar das dependências Web/WebFlux no `pom.xml`, o módulo é usado diretamente como dependência Maven pelos demais projetos Java.
 
 ---
 
@@ -24,7 +24,7 @@ Oferecer uma camada REST para processar, analisar e responder a entradas intelig
 - Java 21
 - Spring Boot 3.5.0
 - Spring AI 1.0.0-SNAPSHOT
-- WebFlux / Web WebFlux & Web
+- Dependências Spring WebFlux e Spring Web presentes no `pom.xml`
 - Maven Project Build
 - Lombok 1.18.30
 - Jackson Databind JSON Parsing
