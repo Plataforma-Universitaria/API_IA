@@ -2,6 +2,8 @@
 
 ---
 É um módulo JAR de comunicação com a OpenAI, com suporte aos formatos de resposta disponibilizados pelo Spring AI, na versão atual `0.0.1-SNAPSHOT`.
+
+`AiService` permanece como classe legada, mas não é mais descoberto automaticamente por `@Service`. No fluxo atual do PIPA, `StudentService`, `TeacherService` e `/api/intent` usam `AiInferenceClient`/`PipaAiInferenceClient`; o Integrator só registra `AiService` e `AIClient` se `ai.legacy.enabled=true`. O gateway é a rota recomendada para novas chamadas de IA.
 ---
 
 ## Objetivo

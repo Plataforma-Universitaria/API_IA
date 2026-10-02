@@ -10,11 +10,9 @@ import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.ai.openai.OpenAiChatModel;
 import org.springframework.ai.openai.OpenAiChatOptions;
 import org.springframework.ai.openai.api.ResponseFormat;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Service
 public class AiService<C extends AbstractClient> {
 
     private final ChatClient chatClient;
